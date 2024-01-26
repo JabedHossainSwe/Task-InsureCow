@@ -21,9 +21,10 @@
                     <td>{{ $product->id }}</td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->price }}</td>
-                    <td>
+                    <td> 
                         <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary">Edit</a>
-                        <form method="POST" action="{{ route('products.destroy', $product->id) }}" style="display: inline;">
+                        <form method="POST" action="{{ route('products.destroy', $product->id) }}"
+                            style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger"
