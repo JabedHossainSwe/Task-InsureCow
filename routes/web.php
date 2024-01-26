@@ -12,19 +12,25 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', function () {
+    if (auth()->check()) {
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        } elseif (auth()->user()->role === 'user') {
+            return redirect()->route('user.dashboard');
+        }
+    }
+
+    return view('home');
+})->name('home');
 
 Route::middleware(['web'])->group(function () {
     Route::middleware(['CheckAdmin:admin'])->group(function () {
-        Route::resource('products', ProductController::class);
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     });
+
 
     Route::middleware(['CheckUserRole:user'])->group(function () {
         Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
-    });
-
-    Route::middleware(['CheckUserRole:admin'])->group(function () {
-        Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     });
 });
