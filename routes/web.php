@@ -25,10 +25,9 @@ Route::get('/home', function () {
 })->name('home');
 
 Route::middleware(['web'])->group(function () {
-    Route::middleware(['CheckAdmin:admin'])->group(function () {
+    Route::middleware(['web', 'checkAdmin'])->group(function () {
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    });
-
+    });     
 
     Route::middleware(['CheckUserRole:user'])->group(function () {
         Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
